@@ -5,6 +5,7 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 let db;
+
 const startServer = async () => {
     const client = await MongoClient.connect("mongodb://localhost:27017/");
     db = client.db("todo");
@@ -17,11 +18,14 @@ const startServer = async () => {
         console.log(`Example app listening on port ${port}`);
     });
 };
+
 startServer();
+
 app.get("/todo", async (req, res) => {
     const todos = await db.collection("todos").find({}).toArray();
     res.send(todos);
 });
+
 app.get("/todo/:id", async (req, res) => {
     const todo = await db.collection("todos").findOne({ id: req.params.id });
     res.send(todo);
